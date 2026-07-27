@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Ritual de los Cuidadores: Capítulo II</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0c1b, #201a36, #110e1a);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 30px 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.5rem;
+      color: #ffd700;
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #dcd6f7;
+      margin-bottom: 18px;
+    }
+
+    .character-img {
+      width: 190px;
+      height: 190px;
+      object-fit: contain;
+      margin: 10px auto;
+      filter: drop-shadow(0 10px 15px rgba(255, 215, 0, 0.3));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .gift-card-img {
+      width: 100%;
+      border-radius: 16px;
+      border: 2px solid #ffd700;
+      margin: 15px 0;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      display: none;
+      animation: fadeIn 1s forwards;
+    }
+
+    .custom-voucher {
+      background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,255,255,0.05));
+      border: 2px dashed #ffd700;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 15px 0;
+      display: none;
+      animation: fadeIn 1s forwards;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ffd700, #ffaa00);
+      color: #110e1a;
+      font-weight: 600;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .music-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn 0.8s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+
+    <!-- INTRODUCCIÓN -->
+    <div class="step active" id="step-0">
+      <img src="Bimbin-removebg-preview_20260726_231003_0000.png" alt="BimBin" class="character-img">
+      <h1>El Ritual de los Cuidadores</h1>
+      <p style="font-size: 0.85rem; color: #ffd700;">Capítulo II: El Festín de la Corona</p>
+      <p>¡Hola, Eri! Sí, soy yo otra vez... BimBin. Sé que nací para la Navidad, pero tu novio me reclutó para volver en tu día especial.</p>
+      <p>Hace dos años renovamos tu energía. Hoy, el consejo se reúne de nuevo para entregarte tres experiencias únicas.</p>
+      <button class="btn" onclick="startJourney()">Abrir el Libro Mágico ✨</button>
+    </div>
+
+    <!-- ACTO I: THARUN & SPA -->
+    <div class="step" id="step-1">
+      <h1>Acto I: Templo de la Calma</h1>
+      <img src="Tharun-removebg-preview_20260726_231150_0000.png" alt="Tharun" class="character-img">
+      <p><strong>Tharun, el Guardián del Descanso:</strong> "Las tensiones acumuladas deben disolverse antes de tu nuevo ciclo. Te guiamos hacia un refugio de paz."</p>
+      
+      <button class="btn" id="btn-reveal-1" onclick="revealGift(1)">Revelar la Primera Bendición 📜</button>
+      
+      <img src="Masajes.jpg" id="gift-1" class="gift-card-img" alt="Vita Lima Spa Gift Card">
+
+      <button class="btn" id="btn-next-1" style="display:none;" onclick="nextStep(2)">Continuar el Viaje ➔</button>
+    </div>
+
+    <!-- ACTO II: LYRA & CABELLO -->
+    <div class="step" id="step-2">
+      <h1>Acto II: El Espejo del Sol</h1>
+      <img src="Lyra-removebg-preview_20260726_231211_0000.png" alt="Lyra" class="character-img">
+      <p><strong>Lyra, la Guardiana del Resplandor:</strong> "Tu luz interior merece una corona a su altura. Es momento de renovar tus matices y tu estilo."</p>
+      
+      <button class="btn" id="btn-reveal-2" onclick="revealGift(2)">Revelar la Segunda Bendición ✂️</button>
+      
+      <div id="gift-2" class="custom-voucher">
+        <h3 style="color:#ffd700;">✨ Experiencia de Renovación de Cabello</h3>
+        <p style="margin-top:8px; font-size:0.9rem;">Un cambio de look completo: <strong>Corte Personalizado + Coloración</strong> diseñado especialmente para tu brillo.</p>
+      </div>
+
+      <button class="btn" id="btn-next-2" style="display:none;" onclick="nextStep(3)">Ir a la Estación Final ➔</button>
+    </div>
+
+    <!-- ACTO III: BIMBIM & LA ROSA NÁUTICA -->
+    <div class="step" id="step-3">
+      <h1>Acto III: El Banquete Marítimo</h1>
+      <img src="Bimbin-removebg-preview_20260726_231003_0000.png" alt="BimBin" class="character-img">
+      <p><strong>BimBin:</strong> "Los guardianes ya cuidaron tu cuerpo y tu luz. Ahora me toca a mí invitarte al gran festín frente al mar."</p>
+      
+      <button class="btn" id="btn-reveal-3" onclick="revealGift(3)">Descubrir el Festín Real 🌊</button>
+      
+      <div id="gift-3" class="custom-voucher">
+        <h3 style="color:#ffd700;">🍷 Almuerzo de Cumpleaños sobre las Olas</h3>
+        <p style="margin-top:8px; font-size:0.9rem;">Una celebración única en <strong>La Rosa Náutica</strong> junto a la Reina Madre (tu mamá) y quien te ama.</p>
+      </div>
+
+      <button class="btn" id="btn-next-3" style="display:none;" onclick="finishJourney()">Ver el Pase Final 🎉</button>
+    </div>
+
+    <!-- EPÍLOGO -->
+    <div class="step" id="step-4">
+      <h1>¡Feliz Cumpleaños, Eri! ❤️</h1>
+      <p>Has completado el ritual de los Tres Actos. Todo esto está listo esperando por ti para celebrarte como la reina que eres.</p>
+      <div style="background: rgba(255,255,255,0.08); padding: 15px; border-radius: 12px; margin: 15px 0; text-align: left; font-size: 0.85rem; line-height: 1.8;">
+        🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
+        ✂️ <strong>Acto II:</strong> Corte & Coloración de Cabello<br>
+        🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
+      </div>
+      <p style="font-size:0.8rem; color:#ffd700;">Con todo el amor del mundo,<br>Tu novio y BimBin.</p>
+    </div>
+
+  </div>
+
+  <!-- AUDIOS CON NOMBRES EXACTOS DE TU REPOSITORIO -->
+  <audio id="bgMusic" src="royaltyfreemusicstudio-medieval-fantasy-music-462199.mp3" loop></audio>
+  <audio id="sfxMagic" src="magic.mp3"></audio>
+  <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    const sfxMagic = document.getElementById('sfxMagic');
+    const sfxOcean = document.getElementById('sfxOcean');
+
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+
+    function startJourney() {
+      bgMusic.volume = 0.4;
+      bgMusic.play().catch(e => console.log("Audio play blocked until interaction"));
+      nextStep(1);
+    }
+
+    function nextStep(stepNumber) {
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      document.getElementById(`step-${stepNumber}`).classList.add('active');
+    }
+
+    function revealGift(actNumber) {
+      sfxMagic.currentTime = 0;
+      sfxMagic.play();
+
+      document.getElementById(`gift-${actNumber}`).style.display = 'block';
+      document.getElementById(`btn-reveal-${actNumber}`).style.display = 'none';
+      document.getElementById(`btn-next-${actNumber}`).style.display = 'block';
+
+      if (actNumber === 3) {
+        sfxOcean.volume = 0.6;
+        sfxOcean.play();
+      }
+    }
+
+    function finishJourney() {
+      nextStep(4);
+      sfxOcean.pause();
+      
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  </script>
+</body>
+</html>
