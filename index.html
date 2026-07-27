@@ -2,25 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>El Ritual de los Cuidadores: Capítulo II</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: #080511;
+      background: #06040d;
       color: #fff;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow-x: hidden;
-      padding: 15px;
+      padding: 12px;
       position: relative;
     }
 
@@ -35,12 +35,12 @@
     .container {
       width: 100%;
       max-width: 480px;
-      background: rgba(20, 15, 35, 0.92);
+      background: rgba(18, 13, 32, 0.94);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 215, 0, 0.3);
+      border: 1px solid rgba(255, 215, 0, 0.35);
       border-radius: 28px;
       padding: 22px 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,215,0,0.05);
       text-align: center;
       position: relative;
       z-index: 2;
@@ -57,16 +57,17 @@
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       color: #fff;
-      margin-bottom: 12px;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     }
 
+    /* Marco del Personaje */
     .character-box {
       width: 160px;
       height: 160px;
-      margin: 0 auto 8px;
+      margin: 0 auto 10px;
       position: relative;
     }
     .character-img {
@@ -82,36 +83,49 @@
       50% { transform: translateY(-10px); }
     }
 
-    /* Caja RPG de Diálogo */
+    /* Canvas para Limpiar la Niebla sobre BimBin */
+    #fog-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      z-index: 5;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    /* Caja de Diálogo RPG */
     .dialogue-box {
-      background: rgba(10, 7, 20, 0.95);
-      border: 1px solid rgba(255, 215, 0, 0.3);
+      background: rgba(8, 5, 16, 0.96);
+      border: 1px solid rgba(255, 215, 0, 0.35);
       border-radius: 18px;
       padding: 16px;
       margin: 12px 0;
-      min-height: 115px;
+      min-height: 125px;
       text-align: left;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #e2dcff;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #e3ddff;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
     }
 
     .speaker-name {
       font-size: 0.8rem;
       color: #ffd700;
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       display: block;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* Opciones y Mini-Juegos */
+    /* Botones y Opciones */
     .interactive-area {
-      margin: 12px 0;
-      min-height: 80px;
+      margin: 10px 0;
+      min-height: 70px;
       display: flex;
       flex-direction: column;
+      gap: 8px;
       justify-content: center;
       align-items: center;
     }
@@ -123,53 +137,64 @@
       border: none;
       padding: 13px 20px;
       border-radius: 50px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
       box-shadow: 0 5px 18px rgba(255, 215, 0, 0.25);
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
       width: 100%;
-      margin-top: 8px;
     }
     .btn:active { transform: scale(0.96); }
 
-    /* Círculo de Respiración */
-    .breath-circle {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,215,0,0.6), rgba(255,215,0,0.1));
-      border: 2px solid #ffd700;
+    /* Mini-Juego: Piedras Volcánicas de Tharun */
+    .stone-slots {
       display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin: 10px 0;
+    }
+    .stone-node {
+      width: 80px;
+      height: 80px;
+      border: 2px dashed rgba(255,215,0,0.5);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 0.8rem;
-      color: #fff;
-      font-weight: 600;
+      font-size: 0.72rem;
+      color: #dcd6f7;
       cursor: pointer;
-      transition: transform 3s linear;
-      box-shadow: 0 0 20px rgba(255,215,0,0.4);
+      background: rgba(255,255,255,0.03);
+      transition: all 0.3s ease;
+    }
+    .stone-node.active {
+      border-style: solid;
+      border-color: #ff5500;
+      background: radial-gradient(circle, rgba(255,85,0,0.4), rgba(20,10,5,0.8));
+      box-shadow: 0 0 18px #ff5500;
+      color: #fff;
     }
 
-    /* Mapa de Estrellas del Mar */
+    /* Mapa de Estrellas de La Rosa Náutica */
     .star-map {
       width: 100%;
-      height: 120px;
-      background: rgba(10,20,40,0.8);
+      height: 110px;
+      background: rgba(8,18,35,0.85);
       border: 1px dashed rgba(255,215,0,0.4);
       border-radius: 16px;
       position: relative;
-      margin-bottom: 10px;
+      margin: 8px 0;
     }
     .star-point {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       background: #ffd700;
       border-radius: 50%;
       position: absolute;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #000;
       font-weight: bold;
       cursor: pointer;
@@ -181,12 +206,12 @@
       box-shadow: 0 0 20px #00ffcc;
     }
 
-    /* Flip Card */
+    /* Flip Card para el Regalo */
     .flip-card {
       width: 100%;
       height: 220px;
       perspective: 1000px;
-      margin: 12px 0;
+      margin: 10px 0;
       display: none;
     }
     .flip-card-inner {
@@ -207,7 +232,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 15px;
+      padding: 14px;
       border: 2px dashed #ffd700;
     }
     .flip-card-front {
@@ -248,6 +273,7 @@
     </div>
 
     <div class="character-box">
+      <canvas id="fog-canvas"></canvas>
       <img id="character-img" src="Bimbin-removebg-preview_20260726_231003_0000.png" class="character-img" alt="Personaje">
     </div>
 
@@ -256,7 +282,7 @@
       <div id="dialogue-text"></div>
     </div>
 
-    <!-- Área de interacción del juego -->
+    <!-- Área Interactiva Dinámica -->
     <div class="interactive-area" id="interactive-area"></div>
 
     <!-- Carta de Regalo Oculta -->
@@ -272,13 +298,13 @@
 
   </div>
 
-  <!-- AUDIOS DE TU REPOSITORIO -->
+  <!-- AUDIOS -->
   <audio id="bgMusic" src="royaltyfreemusicstudio-medieval-fantasy-music-462199.mp3" loop></audio>
   <audio id="sfxMagic" src="magic.mp3"></audio>
   <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
 
   <script>
-    // WEB AUDIO API: SINTETIZADOR DE "VOICE BLIPS" (Sonidos de los personajes)
+    // WEB AUDIO API: SINTETIZADOR POTENCIADO DE "VOICE BLIPS"
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playVoiceBlip(character) {
@@ -287,28 +313,28 @@
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       
-      // Pitch según la voz del personaje
       let freq = 650;
-      if (character === "Tharun") freq = 260; // Grave y suave
-      if (character === "Lyra") freq = 950;   // Cristalino / Agudo
-      if (character === "BimBin") freq = 620 + Math.random() * 100; // Juguetón
+      if (character === "Tharun") freq = 280; // Grave y calmado
+      if (character === "Lyra") freq = 980;   // Cristalino y vibrante
+      if (character === "BimBin") freq = 620 + Math.random() * 120; // Alegre y juguetón
 
       osc.type = character === "Lyra" ? 'triangle' : 'sine';
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
       
-      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+      // Volumen aumentado para sobrepasar suavemente la música de fondo
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
       
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.06);
+      osc.stop(audioCtx.currentTime + 0.07);
     }
 
-    // NARRATIVA Y PASOS
+    // BASE DE DATOS DE HISTORIA EXTENDIDA Y DETALLADA
     const storyData = [
-      // ESCENA 0: PRÓLOGO CON BIMBIN
+      // ESCENA 0: PRÓLOGO EXTENDIDO CON BIMBIN
       {
         chapter: "PRÓLOGO",
         title: "El Despertar de BimBin",
@@ -316,19 +342,33 @@
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
           {
-            text: "¡Psst! ¡Eri! Sí, acércate a la pantalla... ¡Limpiemos el polvo místico de la memoria para despertar el consejo!",
-            type: "rub_screen",
-            btnText: "🧹 Frotar el Espejo Mágico"
+            text: "¡El espejo místico está cubierto de niebla! Frota con tu dedo o lápiz sobre el círculo superior para limpiar el cristal...",
+            type: "scratch_game"
           },
           {
-            text: "¡Eso es! ¡Aparecí! Sé que parezco un duende navideño fuera de temporada, pero tu novio me reclutó para volver en tu día especial. Hace dos años cuidamos de ti, ¡pero hoy venimos por más!",
+            text: "¡Aush! ¡Casi me dejas ciego con tanto frote! ¡Ja ja! ¡Hola de nuevo, Eri! Qué alegría volver a verte a través de la pantalla.",
             type: "choice",
-            btnText: "¡BimBin! ¿Qué han preparado? ✨"
+            btnText: "¡BimBin! ¡No puedo creer que volviste! 😮"
+          },
+          {
+            text: "¡Claro que volví! Sé que parezco un duende de Navidad perdido en el calendario, pero tu novio me dio la clave secreta para aparecer en tu cumpleaños.",
+            type: "choice",
+            btnText: "¿Qué clave secreta? 🤔"
+          },
+          {
+            text: "Hace dos años me convertí en su cómplice oficial. Desde entonces, mi fecha favorita del año no es diciembre... es el día en que naciste tú.",
+            type: "choice",
+            btnText: "Recuerdo el ritual de hace dos años... ✨"
+          },
+          {
+            text: "¡Aquello fue solo el comienzo! En estos dos años has trabajado duro, has luchado, has crecido y tu luz brilla con una fuerza diferente. ¡Hoy venimos a entregarte la Triple Corona!",
+            type: "choice",
+            btnText: "¡Estoy lista! Que comience el viaje 📜"
           }
         ]
       },
 
-      // ESCENA 1: THARUN (MINI-JUEGO DE RESPIRACIÓN)
+      // ESCENA 1: THARUN & SPA (HISTORIA AMPLIADA)
       {
         chapter: "ACTO I",
         title: "El Templo del Sosiego",
@@ -336,18 +376,28 @@
         image: "Tharun-removebg-preview_20260726_231150_0000.png",
         beats: [
           {
-            text: "Saludos, Eri... Soy Tharun, Guardián del Descanso. Veo la tensión acumulada en tus hombros por tanto esfuerzo este año. Para entrar a mi templo, debemos liberar el aire.",
-            type: "breathe_game"
+            text: "Saludos, Eri... Te habla Tharun, Guardián del Descanso. Hace dos años liberé tus manos y pies, pero he estado observándote de cerca.",
+            type: "choice",
+            btnText: "Hola, Tharun... Te escucho 🌿"
           },
           {
-            text: "Excelente. Has exhalado todo el peso. Ahora te aguarda un refugio de bálsamo de coco, piedras volcánicas cálidas y copa de vino para que renazcas.",
+            text: "Veo cómo te entregas a tus días, cómo resuelves problemas y cómo las tensiones del trabajo se han ido acumulando silenciosamente en tu espalda y hombros.",
+            type: "choice",
+            btnText: "Ha sido un año de mucho esfuerzo... 😔"
+          },
+          {
+            text: "Para comenzar un nuevo año de vida y volver a brillar, primero debes soltar la carga. Coloca las 3 Piedras Volcánicas en sus puntos de calor:",
+            type: "stone_game"
+          },
+          {
+            text: "¡El fuego sagrado ha despertado! Te aguarda un refugio de paz en Vita Lima Spa: 80 minutos de masaje Coco Premium, piedras calientes, reflexología y una copa de vino para brindar por tu paz.",
             type: "show_card"
           }
         ],
         cardContent: `<img src="Masajes.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:16px;" alt="Vita Lima Spa">`
       },
 
-      // ESCENA 2: LYRA (PIGMENTOS DE LUZ)
+      // ESCENA 2: LYRA & CABELLO (CONSULTORIO DE ESTILO)
       {
         chapter: "ACTO II",
         title: "El Espejo del Sol",
@@ -355,21 +405,30 @@
         image: "Lyra-removebg-preview_20260726_231211_0000.png",
         beats: [
           {
-            text: "¡Qué dicha verte de nuevo, Eri! Soy Lyra. Tu luz interior ha crecido tanto que exige una nueva corona exterior. Elige cuál es tu energía hoy:",
-            type: "aura_choice"
+            text: "¡Qué dicha reencontrarnos, mi querida Eri! Soy Lyra, la Guardiana del Resplandor. Tu luz interior no ha dejado de evolucionar en este tiempo.",
+            type: "choice",
+            btnText: "¡Lyra! Qué lindo verte de nuevo ✨"
           },
           {
-            text: "¡Una elección perfecta! Con esos matices de luz esculpiremos tu cabello con un corte personalizado y la coloración radiante que mereces.",
+            text: "Un nuevo año de vida exige una nueva manifestación exterior de tu elegancia. Hoy no solo observaremos... diseñaremos tu corona. Elige primero el movimiento de tu cabello:",
+            type: "style_choice_1"
+          },
+          {
+            text: "¡Una elección magistral! Ahora, selecciona el destello de color que envolverá tu rostro:",
+            type: "style_choice_2"
+          },
+          {
+            text: "¡Combinación perfecta! Con mis tijeras de precisión y matices de luz, esculpiremos tu cabello en una sesión completa de Corte Personalizado + Coloración Radiante.",
             type: "show_card"
           }
         ],
         cardContent: `
           <h3 style="color:#ffd700; margin-bottom:6px;">✨ Experiencia de Estilo Real</h3>
-          <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración</strong><br>para matizar tu corona de luz.</p>
+          <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración</strong><br>diseñado para matizar tu corona de luz.</p>
         `
       },
 
-      // ESCENA 3: BIMBIM (CONECTAR 3 ESTRELLAS)
+      // ESCENA 3: BIMBIM & LA ROSA NÁUTICA (HISTORIA EXTENDIDA)
       {
         chapter: "ACTO III",
         title: "El Banquete sobre el Mar",
@@ -377,11 +436,21 @@
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
           {
-            text: "¡Llegamos al acto final! Te he preparado un banquete sobre las olas del océano en La Rosa Náutica. Para abrir la mesa real, toca las 3 estrellas de la compañía:",
+            text: "¡Aquí estoy de nuevo! Los guardianes ya liberaron tu cuerpo del cansancio y diseñaron tu nuevo brillo... ¡ahora la gran fiesta corre por mi cuenta!",
+            type: "choice",
+            btnText: "¡Cuéntame todo, BimBin! 🌊"
+          },
+          {
+            text: "Ningún ritual de cumpleaños está completo sin un festín memorable. He apartado una mesa en un castillo suspendido sobre las olas del mar: La Rosa Náutica.",
+            type: "choice",
+            btnText: "¡Me encanta La Rosa Náutica! 😍"
+          },
+          {
+            text: "Pero la verdadera magia está en la mesa. Una reina no celebra sola: este banquete será para brindar junto a la Reina Madre (tu mamá) que te dio la vida, y quien te ama a tu lado. Toca las 3 estrellas marinas para sellar la mesa:",
             type: "star_game"
           },
           {
-            text: "¡Las tres estrellas se han alineado! Brindaremos sobre las olas junto a la Reina Madre (tu mamá) y quien camina a tu lado.",
+            text: "¡Las tres estrellas del océano brillan alineadas! El mar está listo y la mesa servida para un almuerzo inolvidable sobre las olas.",
             type: "show_card"
           }
         ],
@@ -391,7 +460,7 @@
         `
       },
 
-      // ESCENA 4: EPÍLOGO
+      // ESCENA 4: EPÍLOGO Y CIERRE
       {
         chapter: "EPÍLOGO",
         title: "¡Feliz Cumpleaños, Eri!",
@@ -399,7 +468,7 @@
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
           {
-            text: "Has completado el viaje de los Tres Cuidadores. Cada experiencia ha sido preparada con amor para que descanses, brilles y celebres como la reina que eres.",
+            text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres.",
             type: "final_summary"
           }
         ]
@@ -413,7 +482,7 @@
     const sfxMagic = document.getElementById('sfxMagic');
     const sfxOcean = document.getElementById('sfxOcean');
 
-    // Muro de partículas sutiles
+    // Partículas de fondo
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -440,17 +509,69 @@
     }
     drawParticles();
 
-    // Typewriter con sonidito Blip
+    // CANVA DE NIEBLA (Scratch Off) PARA EL PRÓLOGO
+    function initFogCanvas() {
+      const fogCanvas = document.getElementById('fog-canvas');
+      const fogCtx = fogCanvas.getContext('2d');
+      fogCanvas.width = 160;
+      fogCanvas.height = 160;
+
+      // Pintar capa helada de niebla
+      fogCtx.fillStyle = 'rgba(180, 195, 220, 0.92)';
+      fogCtx.fillRect(0, 0, 160, 160);
+      fogCtx.font = '600 11px Poppins';
+      fogCtx.fillStyle = '#110c22';
+      fogCtx.textAlign = 'center';
+      fogCtx.fillText('FROTA AQUÍ ✨', 80, 80);
+      fogCtx.fillText('PARA LIMPIAR', 80, 95);
+
+      let isScratching = false;
+
+      function scratch(e) {
+        if (!isScratching) return;
+        const rect = fogCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        fogCtx.globalCompositeOperation = 'destination-out';
+        fogCtx.beginPath();
+        fogCtx.arc(x, y, 22, 0, Math.PI * 2);
+        fogCtx.fill();
+      }
+
+      fogCanvas.addEventListener('mousedown', (e) => { isScratching = true; scratch(e); });
+      fogCanvas.addEventListener('mousemove', scratch);
+      fogCanvas.addEventListener('mouseup', () => { isScratching = false; checkScratchProgress(); });
+
+      fogCanvas.addEventListener('touchstart', (e) => { isScratching = true; scratch(e); });
+      fogCanvas.addEventListener('touchmove', scratch);
+      fogCanvas.addEventListener('touchend', () => { isScratching = false; checkScratchProgress(); });
+    }
+
+    function checkScratchProgress() {
+      const fogCanvas = document.getElementById('fog-canvas');
+      fogCanvas.style.transition = 'opacity 0.8s ease';
+      fogCanvas.style.opacity = '0';
+      setTimeout(() => {
+        fogCanvas.style.display = 'none';
+        sfxMagic.play();
+        advanceBeat();
+      }, 700);
+    }
+
+    // Typewriter con sonidito Blip por letra
     function typeWriter(text, speaker, callback) {
       let i = 0;
-      const speed = 25;
+      const speed = 24;
       const element = document.getElementById('dialogue-text');
       element.innerHTML = "";
 
       function type() {
         if (i < text.length) {
           element.innerHTML += text.charAt(i);
-          if (i % 2 === 0) playVoiceBlip(speaker); // Emitir sonido cada 2 letras
+          if (i % 2 === 0) playVoiceBlip(speaker);
           i++;
           setTimeout(type, speed);
         } else {
@@ -467,6 +588,15 @@
       document.getElementById('speaker-name').innerText = scene.speaker;
       document.getElementById('character-img').src = scene.image;
 
+      const fogCanvas = document.getElementById('fog-canvas');
+      if (currentSceneIdx === 0 && currentBeatIdx === 0) {
+        fogCanvas.style.display = 'block';
+        fogCanvas.style.opacity = '1';
+        initFogCanvas();
+      } else {
+        fogCanvas.style.display = 'none';
+      }
+
       document.getElementById('flip-card').style.display = 'none';
       document.getElementById('flip-card').classList.remove('flipped');
 
@@ -480,54 +610,55 @@
       area.innerHTML = "";
 
       typeWriter(beat.text, scene.speaker, () => {
-        // Al terminar el diálogo, renderizar el tipo de interacción
-        if (beat.type === "rub_screen" || beat.type === "choice") {
+        if (beat.type === "choice") {
           const btn = document.createElement('button');
           btn.className = 'btn';
           btn.innerText = beat.btnText;
           btn.onclick = () => {
-            if (currentSceneIdx === 0 && currentBeatIdx === 0) {
-              bgMusic.volume = 0.35;
-              bgMusic.play().catch(e=>console.log(e));
+            if (currentSceneIdx === 0 && currentBeatIdx === 1) {
+              // Hilo musical sutil al 12% para no opacar voces
+              bgMusic.volume = 0.12;
+              bgMusic.play().catch(e => console.log(e));
             }
             advanceBeat();
           };
           area.appendChild(btn);
         }
-        
-        else if (beat.type === "breathe_game") {
-          const circle = document.createElement('div');
-          circle.className = 'breath-circle';
-          circle.innerText = "MANTÉN 3s";
-          let timer;
-          
-          const startBreathe = () => {
-            circle.style.transform = "scale(1.3)";
-            circle.innerText = "EXHALA...";
-            timer = setTimeout(() => {
-              sfxMagic.play();
-              advanceBeat();
-            }, 2500);
-          };
 
-          const stopBreathe = () => {
-            clearTimeout(timer);
-            circle.style.transform = "scale(1)";
-            circle.innerText = "MANTÉN 3s";
-          };
-
-          circle.addEventListener('touchstart', startBreathe);
-          circle.addEventListener('touchend', stopBreathe);
-          circle.addEventListener('mousedown', startBreathe);
-          circle.addEventListener('mouseup', stopBreathe);
-
-          area.appendChild(circle);
+        else if (beat.type === "stone_game") {
+          let stonesCount = 0;
+          area.innerHTML = `
+            <div class="stone-slots">
+              <div class="stone-node" id="st1"><span>🌋</span>Hombros</div>
+              <div class="stone-node" id="st2"><span>🌋</span>Espalda</div>
+              <div class="stone-node" id="st3"><span>🌋</span>Mente</div>
+            </div>
+          `;
+          ['st1', 'st2', 'st3'].forEach(id => {
+            document.getElementById(id).onclick = function() {
+              if (!this.classList.contains('active')) {
+                this.classList.add('active');
+                sfxMagic.play();
+                stonesCount++;
+                if (stonesCount === 3) {
+                  setTimeout(advanceBeat, 600);
+                }
+              }
+            };
+          });
         }
 
-        else if (beat.type === "aura_choice") {
+        else if (beat.type === "style_choice_1") {
           area.innerHTML = `
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✨ Cobre Cálido Radiante</button>
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">🌟 Dorado Sol de Cumpleaños</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Corte Capas Fluidas & Movimiento</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Estilo Bob Moderno & Elegante</button>
+          `;
+        }
+
+        else if (beat.type === "style_choice_2") {
+          area.innerHTML = `
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">🌟 Tono Reflejo Dorado Sol</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✨ Tono Cobre Cálido Iluminado</button>
           `;
         }
 
@@ -536,13 +667,13 @@
           const map = document.createElement('div');
           map.className = 'star-map';
           map.innerHTML = `
-            <div class="star-point" style="top:20px; left:20px;" id="s1">1</div>
-            <div class="star-point" style="top:60px; left:50%; transform:translateX(-50%);" id="s2">2</div>
-            <div class="star-point" style="top:20px; right:20px;" id="s3">3</div>
+            <div class="star-point" style="top:20px; left:20px;" id="s1">Eri</div>
+            <div class="star-point" style="top:55px; left:50%; transform:translateX(-50%);" id="s2">Novio</div>
+            <div class="star-point" style="top:20px; right:20px;" id="s3">Mamá</div>
           `;
           area.appendChild(map);
 
-          ['s1','s2','s3'].forEach((id, idx) => {
+          ['s1','s2','s3'].forEach((id) => {
             document.getElementById(id).onclick = function() {
               if(!this.classList.contains('active')) {
                 this.classList.add('active');
@@ -563,7 +694,7 @@
 
         else if (beat.type === "final_summary") {
           sfxOcean.pause();
-          confetti({ particleCount: 130, spread: 90, origin: { y: 0.6 } });
+          confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 } });
           area.innerHTML = `
             <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 14px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8;">
               🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
