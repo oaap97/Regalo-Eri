@@ -304,37 +304,46 @@
   <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
 
   <script>
-    // WEB AUDIO API: SINTETIZADOR POTENCIADO DE "VOICE BLIPS"
+    // WEB AUDIO API: SINTETIZADOR DE "VOICE BLIPS" (Corregido para Tharun)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function playVoiceBlip(character) {
+    function playVoiceBlip(speaker) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       
       let freq = 650;
-      if (character === "Tharun") freq = 280; // Grave y calmado
-      if (character === "Lyra") freq = 980;   // Cristalino y vibrante
-      if (character === "BimBin") freq = 620 + Math.random() * 120; // Alegre y juguetón
+      let waveType = 'sine';
 
-      osc.type = character === "Lyra" ? 'triangle' : 'sine';
+      // Configuración según el personaje
+      if (speaker.includes("Tharun")) {
+        freq = 240; // Grave, místico y relajante
+        waveType = 'sine';
+      } else if (speaker.includes("Lyra")) {
+        freq = 980; // Cristalino y vibrante
+        waveType = 'triangle';
+      } else { // BimBin o combinación
+        freq = 600 + Math.random() * 120; // Alegre y juguetón
+        waveType = 'sine';
+      }
+
+      osc.type = waveType;
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
       
-      // Volumen aumentado para sobrepasar suavemente la música de fondo
-      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
       
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.07);
+      osc.stop(audioCtx.currentTime + 0.08);
     }
 
-    // BASE DE DATOS DE HISTORIA EXTENDIDA Y DETALLADA
+    // NARRATIVA Y PASOS
     const storyData = [
-      // ESCENA 0: PRÓLOGO EXTENDIDO CON BIMBIN
+      // ESCENA 0: PRÓLOGO CON BIMBIN
       {
         chapter: "PRÓLOGO",
         title: "El Despertar de BimBin",
@@ -368,7 +377,7 @@
         ]
       },
 
-      // ESCENA 1: THARUN & SPA (HISTORIA AMPLIADA)
+      // ESCENA 1: THARUN & SPA (CON NOMBRE DE IMAGEN ACTUALIZADO)
       {
         chapter: "ACTO I",
         title: "El Templo del Sosiego",
@@ -397,7 +406,7 @@
         cardContent: `<img src="IMG-20260726-WA0019.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:16px;" alt="Vita Lima Spa">`
       },
 
-      // ESCENA 2: LYRA & CABELLO (CONSULTORIO DE ESTILO)
+      // ESCENA 2: LYRA & MORENA ILUMINADA
       {
         chapter: "ACTO II",
         title: "El Espejo del Sol",
@@ -410,25 +419,30 @@
             btnText: "¡Lyra! Qué lindo verte de nuevo ✨"
           },
           {
-            text: "Un nuevo año de vida exige una nueva manifestación exterior de tu elegancia. Hoy no solo observaremos... diseñaremos tu corona. Elige primero el movimiento de tu cabello:",
+            text: "Un nuevo año de vida exige resaltar la belleza natural de tu cabello. Hoy prepararemos para ti un diseño de Morena Iluminada: destellos de luz sutiles que iluminan tu rostro manteniendo tu elegancia.",
+            type: "choice",
+            btnText: "¡Me encanta el estilo Morena Iluminada! 😍"
+          },
+          {
+            text: "Elige primero la técnica de estructura para tu corte:",
             type: "style_choice_1"
           },
           {
-            text: "¡Una elección magistral! Ahora, selecciona el destello de color que envolverá tu rostro:",
+            text: "¡Una elección magistral! Ahora, selecciona la tonalidad de luz para tu Morena Iluminada:",
             type: "style_choice_2"
           },
           {
-            text: "¡Combinación perfecta! Con mis tijeras de precisión y matices de luz, esculpiremos tu cabello en una sesión completa de Corte Personalizado + Coloración Radiante.",
+            text: "¡Combinación perfecta! Con mis tijeras de precisión y matices de luz, esculpiremos tu cabello en una sesión completa de Corte Personalizado + Coloración Morena Iluminada.",
             type: "show_card"
           }
         ],
         cardContent: `
-          <h3 style="color:#ffd700; margin-bottom:6px;">✨ Experiencia de Estilo Real</h3>
-          <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración</strong><br>diseñado para matizar tu corona de luz.</p>
+          <h3 style="color:#ffd700; margin-bottom:6px;">✨ Experiencia Morena Iluminada</h3>
+          <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración Morena Iluminada</strong><br>diseñado para resaltar los matices de tu rostro.</p>
         `
       },
 
-      // ESCENA 3: BIMBIM & LA ROSA NÁUTICA (HISTORIA EXTENDIDA)
+      // ESCENA 3: BIMBIM & LA ROSA NÁUTICA
       {
         chapter: "ACTO III",
         title: "El Banquete sobre el Mar",
@@ -516,7 +530,6 @@
       fogCanvas.width = 160;
       fogCanvas.height = 160;
 
-      // Pintar capa helada de niebla
       fogCtx.fillStyle = 'rgba(180, 195, 220, 0.92)';
       fogCtx.fillRect(0, 0, 160, 160);
       fogCtx.font = '600 11px Poppins';
@@ -616,7 +629,6 @@
           btn.innerText = beat.btnText;
           btn.onclick = () => {
             if (currentSceneIdx === 0 && currentBeatIdx === 1) {
-              // Hilo musical sutil al 12% para no opacar voces
               bgMusic.volume = 0.12;
               bgMusic.play().catch(e => console.log(e));
             }
@@ -650,15 +662,15 @@
 
         else if (beat.type === "style_choice_1") {
           area.innerHTML = `
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Corte Capas Fluidas & Movimiento</button>
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Estilo Bob Moderno & Elegante</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Corte Capas Fluidas con Movimiento</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Estilo Bob Elegante & Definido</button>
           `;
         }
 
         else if (beat.type === "style_choice_2") {
           area.innerHTML = `
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">🌟 Tono Reflejo Dorado Sol</button>
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✨ Tono Cobre Cálido Iluminado</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">🍯 Tono Miel Cálido & Suave</button>
+            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">🌰 Tono Avellana / Caramelo Iluminado</button>
           `;
         }
 
@@ -698,7 +710,7 @@
           area.innerHTML = `
             <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 14px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8;">
               🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
-              ✂️ <strong>Acto II:</strong> Corte & Coloración de Cabello<br>
+              ✂️ <strong>Acto II:</strong> Corte & Coloración Morena Iluminada<br>
               🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
             </div>
             <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:12px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
