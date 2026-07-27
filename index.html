@@ -57,13 +57,12 @@
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: #fff;
       margin-bottom: 10px;
       text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     }
 
-    /* Marco del Personaje */
     .character-box {
       width: 160px;
       height: 160px;
@@ -83,7 +82,6 @@
       50% { transform: translateY(-10px); }
     }
 
-    /* Canvas para Limpiar la Niebla sobre BimBin */
     #fog-canvas {
       position: absolute;
       top: 0; left: 0;
@@ -94,7 +92,6 @@
       touch-action: none;
     }
 
-    /* Caja de Diálogo RPG */
     .dialogue-box {
       background: rgba(8, 5, 16, 0.96);
       border: 1px solid rgba(255, 215, 0, 0.35);
@@ -103,7 +100,7 @@
       margin: 12px 0;
       min-height: 125px;
       text-align: left;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       line-height: 1.65;
       color: #e3ddff;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
@@ -119,7 +116,6 @@
       letter-spacing: 1px;
     }
 
-    /* Botones y Opciones */
     .interactive-area {
       margin: 10px 0;
       min-height: 70px;
@@ -145,34 +141,15 @@
     }
     .btn:active { transform: scale(0.96); }
 
-    /* Mini-Juego: Piedras Volcánicas de Tharun */
-    .stone-slots {
-      display: flex;
-      justify-content: space-around;
+    /* Mini-Juego: Masaje Deslizante de Tharun */
+    #massage-canvas {
       width: 100%;
-      margin: 10px 0;
-    }
-    .stone-node {
-      width: 80px;
-      height: 80px;
-      border: 2px dashed rgba(255,215,0,0.5);
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.72rem;
-      color: #dcd6f7;
+      height: 90px;
+      background: rgba(40, 20, 10, 0.6);
+      border: 2px dashed rgba(255, 120, 50, 0.5);
+      border-radius: 16px;
       cursor: pointer;
-      background: rgba(255,255,255,0.03);
-      transition: all 0.3s ease;
-    }
-    .stone-node.active {
-      border-style: solid;
-      border-color: #ff5500;
-      background: radial-gradient(circle, rgba(255,85,0,0.4), rgba(20,10,5,0.8));
-      box-shadow: 0 0 18px #ff5500;
-      color: #fff;
+      touch-action: none;
     }
 
     /* Mapa de Estrellas de La Rosa Náutica */
@@ -282,10 +259,8 @@
       <div id="dialogue-text"></div>
     </div>
 
-    <!-- Área Interactiva Dinámica -->
     <div class="interactive-area" id="interactive-area"></div>
 
-    <!-- Carta de Regalo Oculta -->
     <div class="flip-card" id="flip-card" onclick="revealGiftCard()">
       <div class="flip-card-inner">
         <div class="flip-card-front">
@@ -298,13 +273,12 @@
 
   </div>
 
-  <!-- AUDIOS -->
   <audio id="bgMusic" src="royaltyfreemusicstudio-medieval-fantasy-music-462199.mp3" loop></audio>
   <audio id="sfxMagic" src="magic.mp3"></audio>
   <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
 
   <script>
-    // WEB AUDIO API: SINTETIZADOR DE "VOICE BLIPS" (Corregido para Tharun)
+    // WEB AUDIO API: SINTETIZADOR POTENCIADO Y PROFUNDO PARA THARUN
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playVoiceBlip(speaker) {
@@ -316,175 +290,98 @@
       let freq = 650;
       let waveType = 'sine';
 
-      // Configuración según el personaje
       if (speaker.includes("Tharun")) {
-        freq = 240; // Grave, místico y relajante
-        waveType = 'sine';
-      } else if (speaker.includes("Lyra")) {
-        freq = 980; // Cristalino y vibrante
+        // Tono grave, resonante y místico de cuenco tibetano
+        freq = 130; 
         waveType = 'triangle';
-      } else { // BimBin o combinación
-        freq = 600 + Math.random() * 120; // Alegre y juguetón
+      } else if (speaker.includes("Lyra")) {
+        freq = 980; 
+        waveType = 'triangle';
+      } else { 
+        freq = 600 + Math.random() * 120; 
         waveType = 'sine';
       }
 
       osc.type = waveType;
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
       
-      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(speaker.includes("Tharun") ? 0.25 : 0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (speaker.includes("Tharun") ? 0.15 : 0.08));
       
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.08);
+      osc.stop(audioCtx.currentTime + (speaker.includes("Tharun") ? 0.15 : 0.08));
     }
 
-    // NARRATIVA Y PASOS
     const storyData = [
-      // ESCENA 0: PRÓLOGO CON BIMBIN
       {
         chapter: "PRÓLOGO",
         title: "El Despertar de BimBin",
         speaker: "BimBin",
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
-          {
-            text: "¡El espejo místico está cubierto de niebla! Frota con tu dedo o lápiz sobre el círculo superior para limpiar el cristal...",
-            type: "scratch_game"
-          },
-          {
-            text: "¡Aush! ¡Casi me dejas ciego con tanto frote! ¡Ja ja! ¡Hola de nuevo, Eri! Qué alegría volver a verte a través de la pantalla.",
-            type: "choice",
-            btnText: "¡BimBin! ¡No puedo creer que volviste! 😮"
-          },
-          {
-            text: "¡Claro que volví! Sé que parezco un duende de Navidad perdido en el calendario, pero tu novio me dio la clave secreta para aparecer en tu cumpleaños.",
-            type: "choice",
-            btnText: "¿Qué clave secreta? 🤔"
-          },
-          {
-            text: "Hace dos años me convertí en su cómplice oficial. Desde entonces, mi fecha favorita del año no es diciembre... es el día en que naciste tú.",
-            type: "choice",
-            btnText: "Recuerdo el ritual de hace dos años... ✨"
-          },
-          {
-            text: "¡Aquello fue solo el comienzo! En estos dos años has trabajado duro, has luchado, has crecido y tu luz brilla con una fuerza diferente. ¡Hoy venimos a entregarte la Triple Corona!",
-            type: "choice",
-            btnText: "¡Estoy lista! Que comience el viaje 📜"
-          }
+          { text: "¡El espejo místico está cubierto de niebla! Frota con tu dedo o lápiz sobre el círculo superior para limpiar el cristal...", type: "scratch_game" },
+          { text: "¡Aush! ¡Casi me dejas ciego con tanto frote! ¡Ja ja! ¡Hola de nuevo, Eri! Qué alegría volver a verte a través de la pantalla.", type: "choice", btnText: "¡BimBin! ¡No puedo creer que volviste! 😮" },
+          { text: "¡Claro que volví! Sé que parezco un duende de Navidad perdido en el calendario, pero tu novio me dio la clave secreta para aparecer en tu cumpleaños.", type: "choice", btnText: "¿Qué clave secreta? 🤔" },
+          { text: "Hace dos años me convertí en su cómplice oficial. Desde entonces, mi fecha favorita del año no es diciembre... es el día en que naciste tú.", type: "choice", btnText: "Recuerdo el ritual de hace dos años... ✨" },
+          { text: "¡Aquello fue solo el comienzo! En estos dos años has trabajado duro, has luchado, has crecido y tu luz brilla con una fuerza diferente. ¡Hoy venimos a entregarte la Triple Corona!", type: "choice", btnText: "¡Estoy lista! Que comience el viaje 📜" }
         ]
       },
-
-      // ESCENA 1: THARUN & SPA (CON NOMBRE DE IMAGEN ACTUALIZADO)
       {
         chapter: "ACTO I",
         title: "El Templo del Sosiego",
         speaker: "Tharun",
         image: "Tharun-removebg-preview_20260726_231150_0000.png",
         beats: [
-          {
-            text: "Saludos, Eri... Te habla Tharun, Guardián del Descanso. Hace dos años liberé tus manos y pies, pero he estado observándote de cerca.",
-            type: "choice",
-            btnText: "Hola, Tharun... Te escucho 🌿"
-          },
-          {
-            text: "Veo cómo te entregas a tus días, cómo resuelves problemas y cómo las tensiones del trabajo se han ido acumulando silenciosamente en tu espalda y hombros.",
-            type: "choice",
-            btnText: "Ha sido un año de mucho esfuerzo... 😔"
-          },
-          {
-            text: "Para comenzar un nuevo año de vida y volver a brillar, primero debes soltar la carga. Coloca las 3 Piedras Volcánicas en sus puntos de calor:",
-            type: "stone_game"
-          },
-          {
-            text: "¡El fuego sagrado ha despertado! Te aguarda un refugio de paz en Vita Lima Spa: 80 minutos de masaje Coco Premium, piedras calientes, reflexología y una copa de vino para brindar por tu paz.",
-            type: "show_card"
-          }
+          { text: "Saludos, Eri... Te habla Tharun, Guardián del Descanso. Hace dos años liberé tus manos y pies, pero he estado observándote de cerca.", type: "choice", btnText: "Hola, Tharun... Te escucho 🌿" },
+          { text: "Veo cómo te entregas a tus días, cómo resuelves problemas y cómo las tensiones del trabajo se han ido acumulando silenciosamente en tu espalda y hombros.", type: "choice", btnText: "Ha sido un año de mucho esfuerzo... 😔" },
+          { text: "Para disipar el nudo de la tensión, desliza tu dedo repetidas veces sobre la zona de calor para activar el alivio:", type: "massage_game" },
+          { text: "El calor ha disuelto todo el peso. Te aguarda un refugio de paz en Vita Lima Spa: 80 minutos de masaje Coco Premium, piedras calientes, reflexología y una copa de vino para brindar por tu paz.", type: "show_card" }
         ],
         cardContent: `<img src="IMG-20260726-WA0019.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:16px;" alt="Vita Lima Spa">`
       },
-
-      // ESCENA 2: LYRA & MORENA ILUMINADA
       {
         chapter: "ACTO II",
         title: "El Espejo del Sol",
         speaker: "Lyra",
         image: "Lyra-removebg-preview_20260726_231211_0000.png",
         beats: [
-          {
-            text: "¡Qué dicha reencontrarnos, mi querida Eri! Soy Lyra, la Guardiana del Resplandor. Tu luz interior no ha dejado de evolucionar en este tiempo.",
-            type: "choice",
-            btnText: "¡Lyra! Qué lindo verte de nuevo ✨"
-          },
-          {
-            text: "Un nuevo año de vida exige resaltar la belleza natural de tu cabello. Hoy prepararemos para ti un diseño de Morena Iluminada: destellos de luz sutiles que iluminan tu rostro manteniendo tu elegancia.",
-            type: "choice",
-            btnText: "¡Me encanta el estilo Morena Iluminada! 😍"
-          },
-          {
-            text: "Elige primero la técnica de estructura para tu corte:",
-            type: "style_choice_1"
-          },
-          {
-            text: "¡Una elección magistral! Ahora, selecciona la tonalidad de luz para tu Morena Iluminada:",
-            type: "style_choice_2"
-          },
-          {
-            text: "¡Combinación perfecta! Con mis tijeras de precisión y matices de luz, esculpiremos tu cabello en una sesión completa de Corte Personalizado + Coloración Morena Iluminada.",
-            type: "show_card"
-          }
+          { text: "¡Qué dicha reencontrarnos, mi querida Eri! Soy Lyra, la Guardiana del Resplandor. Tu luz interior no ha dejado de evolucionar en este tiempo.", type: "choice", btnText: "¡Lyra! Qué lindo verte de nuevo ✨" },
+          { text: "Para este nuevo año, regresamos a un lugar muy especial para ustedes: ¡Toda Bella Spa! El mismo refugio de belleza de hace dos años, preparado con una gran sorpresa.", type: "choice", btnText: "¿Qué sorpresa nos espera? 😍" },
+          { text: "Prepárate para lucir radiante con un diseño de Morena Iluminada, acompañado de un corte de punta y un cepillado perfecto. Y como obsequio especial del salón... ¡depilación de cejas y bozo incluida!", type: "choice", btnText: "¡Me fascina la idea! ¿Cómo empezamos? ✂️" },
+          { text: "Elige la tonalidad de luz perfecta para tu Morena Iluminada:", type: "style_choice_2" },
+          { text: "¡Combinación perfecta! Todo está listo en Toda Bella Spa para tu sesión completa de Morena Iluminada, corte, cepillado y el regalo de depilación.", type: "show_card" }
         ],
         cardContent: `
-          <h3 style="color:#ffd700; margin-bottom:6px;">✨ Experiencia Morena Iluminada</h3>
-          <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración Morena Iluminada</strong><br>diseñado para resaltar los matices de tu rostro.</p>
+          <h3 style="color:#ffd700; margin-bottom:6px;">✨ Toda Bella Spa: Morena Iluminada</h3>
+          <p style="font-size:0.81rem; line-height:1.45;">Renovación completa en tu salón favorito:<br><strong>Morena Iluminada + Corte de punta + Cepillado</strong><br><span style="color:#00ffcc;">🎁 Regalo del local: Depilación de cejas y bozo</span></p>
         `
       },
-
-      // ESCENA 3: BIMBIM & LA ROSA NÁUTICA
       {
         chapter: "ACTO III",
         title: "El Banquete sobre el Mar",
         speaker: "BimBin",
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
-          {
-            text: "¡Aquí estoy de nuevo! Los guardianes ya liberaron tu cuerpo del cansancio y diseñaron tu nuevo brillo... ¡ahora la gran fiesta corre por mi cuenta!",
-            type: "choice",
-            btnText: "¡Cuéntame todo, BimBin! 🌊"
-          },
-          {
-            text: "Ningún ritual de cumpleaños está completo sin un festín memorable. He apartado una mesa en un castillo suspendido sobre las olas del mar: La Rosa Náutica.",
-            type: "choice",
-            btnText: "¡Me encanta La Rosa Náutica! 😍"
-          },
-          {
-            text: "Pero la verdadera magia está en la mesa. Una reina no celebra sola: este banquete será para brindar junto a la Reina Madre (tu mamá) que te dio la vida, y quien te ama a tu lado. Toca las 3 estrellas marinas para sellar la mesa:",
-            type: "star_game"
-          },
-          {
-            text: "¡Las tres estrellas del océano brillan alineadas! El mar está listo y la mesa servida para un almuerzo inolvidable sobre las olas.",
-            type: "show_card"
-          }
+          { text: "¡Aquí estoy de nuevo! Los guardianes ya liberaron tu cuerpo del cansancio y diseñaron tu nuevo brillo... ¡ahora la gran fiesta corre por mi cuenta!", type: "choice", btnText: "¡Cuéntame todo, BimBin! 🌊" },
+          { text: "Ningún ritual de cumpleaños está completo sin un festín memorable. He apartado una mesa en un castillo suspendido sobre las olas del mar: La Rosa Náutica.", type: "choice", btnText: "¡Me encanta La Rosa Náutica! 😍" },
+          { text: "Pero la verdadera magia está en la mesa. Una reina no celebra sola: este banquete será para brindar junto a la Reina Madre (tu mamá) que te dio la vida, y quien te ama a tu lado. Toca las 3 estrellas marinas para sellar la mesa:", type: "star_game" },
+          { text: "¡Las tres estrellas del océano brillan alineadas! El mar está listo y la mesa servida para un almuerzo inolvidable sobre las olas.", type: "show_card" }
         ],
         cardContent: `
           <h3 style="color:#ffd700; margin-bottom:6px;">🍷 Festín en La Rosa Náutica</h3>
           <p style="font-size:0.85rem; line-height:1.5;">Almuerzo de celebración sobre el océano Pacífico junto a la <strong>Reina Madre (tu mamá)</strong> y quien te ama.</p>
         `
       },
-
-      // ESCENA 4: EPÍLOGO Y CIERRE
       {
         chapter: "EPÍLOGO",
         title: "¡Feliz Cumpleaños, Eri!",
         speaker: "BimBin y tu Novio",
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
-          {
-            text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres.",
-            type: "final_summary"
-          }
+          { text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres.", type: "final_summary" }
         ]
       }
     ];
@@ -496,7 +393,6 @@
     const sfxMagic = document.getElementById('sfxMagic');
     const sfxOcean = document.getElementById('sfxOcean');
 
-    // Partículas de fondo
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -523,7 +419,6 @@
     }
     drawParticles();
 
-    // CANVA DE NIEBLA (Scratch Off) PARA EL PRÓLOGO
     function initFogCanvas() {
       const fogCanvas = document.getElementById('fog-canvas');
       const fogCtx = fogCanvas.getContext('2d');
@@ -574,7 +469,51 @@
       }, 700);
     }
 
-    // Typewriter con sonidito Blip por letra
+    // Mini-juego de Masaje Deslizante para Tharun
+    function initMassageCanvas() {
+      const mCanvas = document.getElementById('massage-canvas');
+      const mCtx = mCanvas.getContext('2d');
+      mCanvas.width = mCanvas.offsetWidth || 300;
+      mCanvas.height = 90;
+
+      let progress = 0;
+      mCtx.fillStyle = '#3a1c10';
+      mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
+      mCtx.font = '500 13px Poppins';
+      mCtx.fillStyle = '#ffd700';
+      mCtx.textAlign = 'center';
+      mCtx.fillText('Desliza tu dedo aquí para disipar la tensión 🌿', mCanvas.width / 2, 50);
+
+      let isMassaging = false;
+
+      function moveMassage(e) {
+        if (!isMassaging) return;
+        progress += 4;
+        
+        mCtx.fillStyle = `rgba(255, 140, 0, ${progress / 100})`;
+        mCtx.fillRect(0, 0, (mCanvas.width * progress) / 100, mCanvas.height);
+
+        mCtx.font = '500 13px Poppins';
+        mCtx.fillStyle = '#fff';
+        mCtx.textAlign = 'center';
+        mCtx.fillText(`Liberando tensión... ${Math.min(progress, 100)}%`, mCanvas.width / 2, 50);
+
+        if (progress >= 100) {
+          isMassaging = false;
+          sfxMagic.play();
+          setTimeout(advanceBeat, 500);
+        }
+      }
+
+      mCanvas.addEventListener('mousedown', () => { isMassaging = true; });
+      mCanvas.addEventListener('mousemove', moveMassage);
+      mCanvas.addEventListener('mouseup', () => { isMassaging = false; });
+
+      mCanvas.addEventListener('touchstart', () => { isMassaging = true; });
+      mCanvas.addEventListener('touchmove', moveMassage);
+      mCanvas.addEventListener('touchend', () => { isMassaging = false; });
+    }
+
     function typeWriter(text, speaker, callback) {
       let i = 0;
       const speed = 24;
@@ -637,34 +576,9 @@
           area.appendChild(btn);
         }
 
-        else if (beat.type === "stone_game") {
-          let stonesCount = 0;
-          area.innerHTML = `
-            <div class="stone-slots">
-              <div class="stone-node" id="st1"><span>🌋</span>Hombros</div>
-              <div class="stone-node" id="st2"><span>🌋</span>Espalda</div>
-              <div class="stone-node" id="st3"><span>🌋</span>Mente</div>
-            </div>
-          `;
-          ['st1', 'st2', 'st3'].forEach(id => {
-            document.getElementById(id).onclick = function() {
-              if (!this.classList.contains('active')) {
-                this.classList.add('active');
-                sfxMagic.play();
-                stonesCount++;
-                if (stonesCount === 3) {
-                  setTimeout(advanceBeat, 600);
-                }
-              }
-            };
-          });
-        }
-
-        else if (beat.type === "style_choice_1") {
-          area.innerHTML = `
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Corte Capas Fluidas con Movimiento</button>
-            <button class="btn" onclick="sfxMagic.play(); advanceBeat();">✂️ Estilo Bob Elegante & Definido</button>
-          `;
+        else if (beat.type === "massage_game") {
+          area.innerHTML = `<canvas id="massage-canvas"></canvas>`;
+          setTimeout(initMassageCanvas, 50);
         }
 
         else if (beat.type === "style_choice_2") {
@@ -710,7 +624,7 @@
           area.innerHTML = `
             <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 14px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8;">
               🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
-              ✂️ <strong>Acto II:</strong> Corte & Coloración Morena Iluminada<br>
+              ✂️ <strong>Acto II:</strong> Toda Bella Spa (Morena Iluminada + Corte + Cepillado + Regalo depilación)<br>
               🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
             </div>
             <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:12px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
