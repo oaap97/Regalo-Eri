@@ -226,23 +226,50 @@
       border-style: solid;
     }
 
-    /* ESTILOS DE LA TARJETA EXPORTABLE AL FINAL */
+    /* ESTILOS DE LA TARJETA EXPORTABLE AL FINAL PARA INSTAGRAM */
     .export-card-wrapper {
       margin-top: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .format-toggle-container {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    .format-btn {
+      flex: 1;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 20px;
+      color: #ccc;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .format-btn.active {
+      background: rgba(255,215,0,0.25);
+      border-color: #ffd700;
+      color: #fff;
+      font-weight: 600;
     }
 
     .bday-card {
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
       aspect-ratio: 1/1;
       background: radial-gradient(circle at 50% 30%, #1c1435 0%, #080512 85%);
       border: 1px solid rgba(255, 215, 0, 0.4);
       position: relative;
-      padding: 25px 20px;
+      padding: 24px 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -251,6 +278,12 @@
       border-radius: 20px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.8);
       overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .bday-card.story-mode {
+      aspect-ratio: 9/16;
+      padding: 45px 22px;
     }
 
     .bday-card::before {
@@ -455,7 +488,7 @@
         speaker: "BimBin y tu Novio",
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
-          { text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres. ¡Aquí tienes tu tarjeta de recuerdo!", type: "final_summary" }
+          { text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres. ¡Elige tu formato de tarjeta de recuerdo!", type: "final_summary" }
         ]
       }
     ];
@@ -695,7 +728,6 @@
           sfxOcean.pause();
           confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 } });
           
-          // MOSTRAR LA TARJETA VISUAL SUTIL CON BOTÓN DE DESCARGA
           area.innerHTML = `
             <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 12px; border-radius: 16px; text-align: left; font-size: 0.81rem; line-height: 1.7; width:100%;">
               🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
@@ -703,8 +735,14 @@
               🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
             </div>
 
-            <!-- TARJETA EXPORTABLE -->
+            <!-- TARJETA EXPORTABLE PARA INSTAGRAM CON SELECTOR DE FORMATO -->
             <div class="export-card-wrapper">
+              
+              <div class="format-toggle-container">
+                <button class="format-btn active" id="btnSquareFormat" onclick="toggleCardFormat('square')">Post IG (1:1)</button>
+                <button class="format-btn" id="btnStoryFormat" onclick="toggleCardFormat('story')">Story IG (9:16)</button>
+              </div>
+
               <div class="bday-card" id="exportableBdayCard">
                 <div>
                   <div class="sub-tag">EL RITUAL DE LOS CUIDADORES</div>
@@ -725,13 +763,30 @@
                 </div>
               </div>
 
-              <button class="btn" style="margin-top:8px;" onclick="downloadSouvenirCard()">📸 Descargar mi Tarjeta de Recuerdo (PNG)</button>
+              <button class="btn" style="margin-top:6px;" onclick="downloadSouvenirCard()">📸 Descargar Tarjeta de Recuerdo (PNG)</button>
             </div>
 
             <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:14px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
           `;
         }
       });
+    }
+
+    // ALTERNAR ENTRE FORMATO POST (1:1) Y STORY (9:16)
+    function toggleCardFormat(format) {
+      const card = document.getElementById('exportableBdayCard');
+      const btnSquare = document.getElementById('btnSquareFormat');
+      const btnStory = document.getElementById('btnStoryFormat');
+
+      if (format === 'story') {
+        card.classList.add('story-mode');
+        btnStory.classList.add('active');
+        btnSquare.classList.remove('active');
+      } else {
+        card.classList.remove('story-mode');
+        btnSquare.classList.add('active');
+        btnStory.classList.remove('active');
+      }
     }
 
     // FUNCIÓN PARA DESCARGAR LA TARJETA PNG
