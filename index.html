@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>El Ritual de los Cuidadores: Capítulo II</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Fuentes Elegantes y Librerías (Confetti + html2canvas para descarga de tarjeta) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Poppins:wght@300;400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: manipulation; }
@@ -64,8 +66,8 @@
     }
 
     .character-box {
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
       margin: 0 auto 10px;
       position: relative;
     }
@@ -98,7 +100,7 @@
       border-radius: 18px;
       padding: 16px;
       margin: 12px 0;
-      min-height: 125px;
+      min-height: 120px;
       text-align: left;
       font-size: 0.86rem;
       line-height: 1.65;
@@ -118,7 +120,7 @@
 
     .interactive-area {
       margin: 10px 0;
-      min-height: 70px;
+      min-height: 60px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -141,10 +143,10 @@
     }
     .btn:active { transform: scale(0.96); }
 
-    /* Mini-Juego: Masaje Deslizante de Tharun */
+    /* Canvas de Masaje de Tharun */
     #massage-canvas {
       width: 100%;
-      height: 90px;
+      height: 85px;
       background: rgba(40, 20, 10, 0.6);
       border: 2px dashed rgba(255, 120, 50, 0.5);
       border-radius: 16px;
@@ -152,10 +154,10 @@
       touch-action: none;
     }
 
-    /* Mapa de Estrellas de La Rosa Náutica */
+    /* Mapa de Estrellas */
     .star-map {
       width: 100%;
-      height: 110px;
+      height: 105px;
       background: rgba(8,18,35,0.85);
       border: 1px dashed rgba(255,215,0,0.4);
       border-radius: 16px;
@@ -183,7 +185,7 @@
       box-shadow: 0 0 20px #00ffcc;
     }
 
-    /* Flip Card para el Regalo */
+    /* Flip Card */
     .flip-card {
       width: 100%;
       height: 220px;
@@ -224,6 +226,79 @@
       border-style: solid;
     }
 
+    /* ESTILOS DE LA TARJETA EXPORTABLE AL FINAL */
+    .export-card-wrapper {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bday-card {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1/1;
+      background: radial-gradient(circle at 50% 30%, #1c1435 0%, #080512 85%);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      position: relative;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+
+    .bday-card::before {
+      content: '';
+      position: absolute;
+      top: 10px; left: 10px; right: 10px; bottom: 10px;
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .bday-card .sub-tag {
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: #ffd700;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .bday-card .main-h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.25rem;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.45);
+    }
+
+    .bday-card .bday-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: #e6e0ff;
+    }
+
+    .bday-card .highlight-gold {
+      color: #ffd700;
+      font-weight: 600;
+    }
+
+    .bday-card .footer-text {
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      color: rgba(255, 215, 0, 0.8);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
     .music-btn {
       position: absolute;
       top: 15px; right: 15px;
@@ -249,7 +324,7 @@
       <h1 id="scene-title">El Espejo de la Memoria</h1>
     </div>
 
-    <div class="character-box">
+    <div class="character-box" id="character-container">
       <canvas id="fog-canvas"></canvas>
       <img id="character-img" src="Bimbin-removebg-preview_20260726_231003_0000.png" class="character-img" alt="Personaje">
     </div>
@@ -278,7 +353,7 @@
   <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
 
   <script>
-    // WEB AUDIO API: SINTETIZADOR POTENCIADO Y PROFUNDO PARA THARUN
+    // WEB AUDIO API: VOICE BLIPS DE LOS PERSONAJES
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playVoiceBlip(speaker) {
@@ -291,14 +366,13 @@
       let waveType = 'sine';
 
       if (speaker.includes("Tharun")) {
-        // Tono grave, resonante y místico de cuenco tibetano
-        freq = 130; 
+        freq = 130; // Grave y místico
         waveType = 'triangle';
       } else if (speaker.includes("Lyra")) {
-        freq = 980; 
+        freq = 980; // Cristalino y vibrante
         waveType = 'triangle';
       } else { 
-        freq = 600 + Math.random() * 120; 
+        freq = 600 + Math.random() * 120; // Alegre y juguetón
         waveType = 'sine';
       }
 
@@ -381,7 +455,7 @@
         speaker: "BimBin y tu Novio",
         image: "Bimbin-removebg-preview_20260726_231003_0000.png",
         beats: [
-          { text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres.", type: "final_summary" }
+          { text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias ha sido elegida con todo el amor del mundo para que descanses, brilles y celebres lo increíble que eres. ¡Aquí tienes tu tarjeta de recuerdo!", type: "final_summary" }
         ]
       }
     ];
@@ -422,16 +496,16 @@
     function initFogCanvas() {
       const fogCanvas = document.getElementById('fog-canvas');
       const fogCtx = fogCanvas.getContext('2d');
-      fogCanvas.width = 160;
-      fogCanvas.height = 160;
+      fogCanvas.width = 150;
+      fogCanvas.height = 150;
 
       fogCtx.fillStyle = 'rgba(180, 195, 220, 0.92)';
-      fogCtx.fillRect(0, 0, 160, 160);
+      fogCtx.fillRect(0, 0, 150, 150);
       fogCtx.font = '600 11px Poppins';
       fogCtx.fillStyle = '#110c22';
       fogCtx.textAlign = 'center';
-      fogCtx.fillText('FROTA AQUÍ ✨', 80, 80);
-      fogCtx.fillText('PARA LIMPIAR', 80, 95);
+      fogCtx.fillText('FROTA AQUÍ ✨', 75, 75);
+      fogCtx.fillText('PARA LIMPIAR', 75, 90);
 
       let isScratching = false;
 
@@ -469,12 +543,11 @@
       }, 700);
     }
 
-    // Mini-juego de Masaje Deslizante para Tharun
     function initMassageCanvas() {
       const mCanvas = document.getElementById('massage-canvas');
       const mCtx = mCanvas.getContext('2d');
       mCanvas.width = mCanvas.offsetWidth || 300;
-      mCanvas.height = 90;
+      mCanvas.height = 85;
 
       let progress = 0;
       mCtx.fillStyle = '#3a1c10';
@@ -482,7 +555,7 @@
       mCtx.font = '500 13px Poppins';
       mCtx.fillStyle = '#ffd700';
       mCtx.textAlign = 'center';
-      mCtx.fillText('Desliza tu dedo aquí para disipar la tensión 🌿', mCanvas.width / 2, 50);
+      mCtx.fillText('Desliza tu dedo aquí para disipar la tensión 🌿', mCanvas.width / 2, 48);
 
       let isMassaging = false;
 
@@ -496,7 +569,7 @@
         mCtx.font = '500 13px Poppins';
         mCtx.fillStyle = '#fff';
         mCtx.textAlign = 'center';
-        mCtx.fillText(`Liberando tensión... ${Math.min(progress, 100)}%`, mCanvas.width / 2, 50);
+        mCtx.fillText(`Liberando tensión... ${Math.min(progress, 100)}%`, mCanvas.width / 2, 48);
 
         if (progress >= 100) {
           isMassaging = false;
@@ -594,7 +667,7 @@
           map.className = 'star-map';
           map.innerHTML = `
             <div class="star-point" style="top:20px; left:20px;" id="s1">Eri</div>
-            <div class="star-point" style="top:55px; left:50%; transform:translateX(-50%);" id="s2">Novio</div>
+            <div class="star-point" style="top:52px; left:50%; transform:translateX(-50%);" id="s2">Novio</div>
             <div class="star-point" style="top:20px; right:20px;" id="s3">Mamá</div>
           `;
           area.appendChild(map);
@@ -621,15 +694,58 @@
         else if (beat.type === "final_summary") {
           sfxOcean.pause();
           confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 } });
+          
+          // MOSTRAR LA TARJETA VISUAL SUTIL CON BOTÓN DE DESCARGA
           area.innerHTML = `
-            <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 14px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8;">
+            <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 12px; border-radius: 16px; text-align: left; font-size: 0.81rem; line-height: 1.7; width:100%;">
               🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
-              ✂️ <strong>Acto II:</strong> Toda Bella Spa (Morena Iluminada + Corte + Cepillado + Regalo depilación)<br>
+              ✂️ <strong>Acto II:</strong> Toda Bella Spa (Morena Iluminada + Corte + Cepillado)<br>
               🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
             </div>
-            <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:12px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
+
+            <!-- TARJETA EXPORTABLE -->
+            <div class="export-card-wrapper">
+              <div class="bday-card" id="exportableBdayCard">
+                <div>
+                  <div class="sub-tag">EL RITUAL DE LOS CUIDADORES</div>
+                  <div class="main-h1">¡Feliz Cumpleaños, Eri! 👑</div>
+                </div>
+
+                <div style="font-size: 1.2rem; margin: 8px 0;">✨ 👑 ✨</div>
+
+                <div>
+                  <p class="bday-text">
+                    Un nuevo ciclo comienza hoy.<br>
+                    <span class="highlight-gold">Tres momentos especiales</span> preparados con todo el amor para que descanses, brilles y celebres la gran persona que eres.
+                  </p>
+                </div>
+
+                <div>
+                  <div class="footer-text">CAPÍTULO II • CELEBRANDO TU VIDA</div>
+                </div>
+              </div>
+
+              <button class="btn" style="margin-top:8px;" onclick="downloadSouvenirCard()">📸 Descargar mi Tarjeta de Recuerdo (PNG)</button>
+            </div>
+
+            <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:14px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
           `;
         }
+      });
+    }
+
+    // FUNCIÓN PARA DESCARGAR LA TARJETA PNG
+    function downloadSouvenirCard() {
+      const card = document.getElementById('exportableBdayCard');
+      html2canvas(card, {
+        scale: 3,
+        backgroundColor: null,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Feliz_Cumpleanos_Eri_Ritual.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
       });
     }
 
