@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>El Ritual de los Cuidadores: Capítulo II</title>
   
-  <!-- Google Fonts & Confetti -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -14,7 +13,7 @@
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: #0b0813;
+      background: #090610;
       color: #fff;
       min-height: 100vh;
       display: flex;
@@ -25,13 +24,10 @@
       position: relative;
     }
 
-    /* Fondo de estrellas/partículas */
     #particle-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
       pointer-events: none;
     }
@@ -39,65 +35,47 @@
     .container {
       width: 100%;
       max-width: 480px;
-      background: rgba(22, 17, 38, 0.85);
+      background: rgba(20, 15, 35, 0.9);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 215, 0, 0.25);
+      border: 1px solid rgba(255, 215, 0, 0.3);
       border-radius: 28px;
       padding: 25px 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 15px rgba(255,215,0,0.05);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,215,0,0.05);
       text-align: center;
       position: relative;
       z-index: 2;
     }
 
-    /* Barra de Progreso */
-    .progress-bar {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: all 0.4s ease;
-    }
-    .dot.active {
-      background: #ffd700;
-      box-shadow: 0 0 10px #ffd700;
-      transform: scale(1.2);
+    /* Indicador de Capítulo */
+    .chapter-tag {
+      font-size: 0.75rem;
+      color: #ffd700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      font-weight: 600;
     }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: 1.35rem;
-      color: #ffd700;
-      margin-bottom: 5px;
-      text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
-    }
-
-    .subtitle {
-      font-size: 0.8rem;
-      color: #a594fd;
-      letter-spacing: 1px;
+      font-size: 1.3rem;
+      color: #fff;
       margin-bottom: 15px;
-      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
 
-    /* Personaje con aura */
+    /* Personajes con Animación de Flotación */
     .character-box {
-      position: relative;
       width: 170px;
       height: 170px;
-      margin: 10px auto;
+      margin: 0 auto 10px;
+      position: relative;
     }
     .character-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.35));
       animation: float 3.5s ease-in-out infinite;
     }
 
@@ -106,19 +84,19 @@
       50% { transform: translateY(-10px); }
     }
 
-    /* Caja de Diálogo RPG */
+    /* Caja de Conversación RPG */
     .dialogue-box {
-      background: rgba(10, 7, 20, 0.9);
+      background: rgba(10, 7, 20, 0.95);
       border: 1px solid rgba(255, 215, 0, 0.3);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 18px;
       margin: 15px 0;
-      min-height: 110px;
+      min-height: 120px;
       text-align: left;
       font-size: 0.92rem;
       line-height: 1.6;
       color: #e2dcff;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
       position: relative;
     }
 
@@ -128,46 +106,54 @@
       font-weight: 600;
       margin-bottom: 6px;
       display: block;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* Botones Interactivos */
+    /* Botones de Respuesta de Eri */
+    .choices-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
     .btn {
       background: linear-gradient(135deg, #ffd700, #ff9900);
       color: #0c0914;
       font-weight: 600;
       border: none;
-      padding: 14px 20px;
+      padding: 13px 20px;
       border-radius: 50px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      margin-top: 10px;
+      box-shadow: 0 5px 18px rgba(255, 215, 0, 0.25);
+      transition: all 0.25s ease;
       width: 100%;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .btn.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .btn:active {
-      transform: scale(0.96);
     }
 
-    /* 3D Flip Card para el Regalo */
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      box-shadow: none;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Flip Card para Revelar Regalo */
     .flip-card {
-      background-color: transparent;
       width: 100%;
-      height: 220px;
+      height: 230px;
       perspective: 1000px;
       margin: 15px 0;
       display: none;
     }
     .flip-card-inner {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       text-align: center;
       transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-style: preserve-3d;
@@ -177,11 +163,10 @@
     }
     .flip-card-front, .flip-card-back {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
-      border-radius: 16px;
+      border-radius: 18px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -190,12 +175,12 @@
       border: 2px dashed #ffd700;
     }
     .flip-card-front {
-      background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(20,15,35,0.9));
+      background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(15,10,25,0.95));
       color: #ffd700;
       cursor: pointer;
     }
     .flip-card-back {
-      background: linear-gradient(135deg, rgba(30,25,50,0.95), rgba(15,10,25,0.95));
+      background: linear-gradient(135deg, rgba(25,20,45,0.95), rgba(10,5,20,0.98));
       color: white;
       transform: rotateY(180deg);
       border-style: solid;
@@ -203,24 +188,14 @@
 
     .music-btn {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 15px; right: 15px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
       color: #fff;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       cursor: pointer;
       z-index: 10;
-    }
-
-    .step { display: none; }
-    .step.active { display: block; animation: fadeIn 0.6s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -231,175 +206,166 @@
   <div class="container">
     <button class="music-btn" onclick="toggleMusic()">🎵</button>
 
-    <!-- Barra de progreso de la historia -->
-    <div class="progress-bar">
-      <div class="dot active" id="dot-0"></div>
-      <div class="dot" id="dot-1"></div>
-      <div class="dot" id="dot-2"></div>
-      <div class="dot" id="dot-3"></div>
-      <div class="dot" id="dot-4"></div>
+    <div id="scene-header">
+      <div class="chapter-tag" id="chapter-tag">PRÓLOGO</div>
+      <h1 id="scene-title">El Regreso de BimBin</h1>
     </div>
 
-    <!-- ESCENA 0: INTRODUCCIÓN -->
-    <div class="step active" id="step-0">
-      <h1>El Ritual de los Cuidadores</h1>
-      <div class="subtitle">Capítulo II: El Festín de la Corona</div>
-      
-      <div class="character-box">
-        <img src="Bimbin-removebg-preview_20260726_231003_0000.png" class="character-img" alt="BimBin">
-      </div>
-
-      <div class="dialogue-box">
-        <span class="speaker-name">BimBin</span>
-        <div id="text-0"></div>
-      </div>
-
-      <button class="btn" id="btn-0" onclick="startJourney()">Abrir el Libro Mágico ✨</button>
+    <div class="character-box">
+      <img id="character-img" src="Bimbin-removebg-preview_20260726_231003_0000.png" class="character-img" alt="Personaje">
     </div>
 
-    <!-- ESCENA 1: THARUN -->
-    <div class="step" id="step-1">
-      <h1>Acto I: El Templo del Sosiego</h1>
-      <div class="subtitle">La Búsqueda de la Calma</div>
+    <div class="dialogue-box">
+      <span class="speaker-name" id="speaker-name">BimBin</span>
+      <div id="dialogue-text"></div>
+    </div>
 
-      <div class="character-box">
-        <img src="Tharun-removebg-preview_20260726_231150_0000.png" class="character-img" alt="Tharun">
-      </div>
-
-      <div class="dialogue-box">
-        <span class="speaker-name" id="speaker-1">Tharun</span>
-        <div id="text-1"></div>
-      </div>
-
-      <div class="flip-card" id="card-1" onclick="flipCard(1)">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <span style="font-size:2rem; margin-bottom:8px;">📜</span>
-            <p style="font-size:0.9rem; font-weight:600;">Toca para Romper el Sello Mágico</p>
-          </div>
-          <div class="flip-card-back" style="padding:0; overflow:hidden;">
-            <img src="Masajes.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Vita Lima Spa">
-          </div>
+    <!-- Carta interactiva oculta -->
+    <div class="flip-card" id="flip-card" onclick="revealGiftCard()">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <span style="font-size:2.2rem; margin-bottom:8px;">✨</span>
+          <p style="font-size:0.9rem; font-weight:600;">Toca para Romper el Sello Mágico</p>
+        </div>
+        <div class="flip-card-back" id="card-back-content">
+          <!-- Contenido dinámico del regalo -->
         </div>
       </div>
-
-      <button class="btn" id="btn-1" onclick="nextScene(2)">Aceptar esta Bendición ➔</button>
     </div>
 
-    <!-- ESCENA 2: LYRA -->
-    <div class="step" id="step-2">
-      <h1>Acto II: El Espejo del Sol</h1>
-      <div class="subtitle">La Metamorfosis</div>
-
-      <div class="character-box">
-        <img src="Lyra-removebg-preview_20260726_231211_0000.png" class="character-img" alt="Lyra">
-      </div>
-
-      <div class="dialogue-box">
-        <span class="speaker-name" id="speaker-2">Lyra</span>
-        <div id="text-2"></div>
-      </div>
-
-      <div class="flip-card" id="card-2" onclick="flipCard(2)">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <span style="font-size:2rem; margin-bottom:8px;">✂️</span>
-            <p style="font-size:0.9rem; font-weight:600;">Toca para Revelar el Espejo Mágico</p>
-          </div>
-          <div class="flip-card-back">
-            <h3 style="color:#ffd700; margin-bottom:8px;">✨ Experiencia de Estilo Real</h3>
-            <p style="font-size:0.85rem; line-height:1.5;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración</strong><br>para matizar tu corona de luz.</p>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn" id="btn-2" onclick="nextScene(3)">Continuar hacia el Mar ➔</button>
+    <!-- Botones de Acción de Eri -->
+    <div class="choices-container" id="choices-container">
+      <!-- Se generan dinámicamente -->
     </div>
-
-    <!-- ESCENA 3: BIMBIM - LA ROSA NÁUTICA -->
-    <div class="step" id="step-3">
-      <h1>Acto III: El Banquete Marítimo</h1>
-      <div class="subtitle">La Gran Celebración</div>
-
-      <div class="character-box">
-        <img src="Bimbin-removebg-preview_20260726_231003_0000.png" class="character-img" alt="BimBin">
-      </div>
-
-      <div class="dialogue-box">
-        <span class="speaker-name" id="speaker-3">BimBin</span>
-        <div id="text-3"></div>
-      </div>
-
-      <div class="flip-card" id="card-3" onclick="flipCard(3)">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <span style="font-size:2rem; margin-bottom:8px;">🌊</span>
-            <p style="font-size:0.9rem; font-weight:600;">Toca para Desbloquear la Mesa del Mar</p>
-          </div>
-          <div class="flip-card-back">
-            <h3 style="color:#ffd700; margin-bottom:8px;">🍷 Festín en La Rosa Náutica</h3>
-            <p style="font-size:0.85rem; line-height:1.5;">Almuerzo de celebración sobre el océano Pacífico junto a la <strong>Reina Madre (tu mamá)</strong> y quien te ama.</p>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn" id="btn-3" onclick="finishJourney()">Ver el Pase de Cumpleaños 🎉</button>
-    </div>
-
-    <!-- ESCENA 4: FINAL -->
-    <div class="step" id="step-4">
-      <h1>¡Feliz Cumpleaños, Eri! ❤️</h1>
-      <div class="subtitle">La Triple Corona es Tuya</div>
-
-      <div class="dialogue-box" style="min-height:auto;">
-        <p style="font-size:0.88rem; line-height:1.7;">
-          Has completado el viaje de los Tres Cuidadores. Cada experiencia ha sido elegida con todo el amor para que descanses, brilles y celebres la gran persona que eres.
-        </p>
-      </div>
-
-      <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.2); padding: 15px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8; margin-bottom:15px;">
-        🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
-        ✂️ <strong>Acto II:</strong> Corte & Coloración de Cabello<br>
-        🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
-      </div>
-
-      <p style="font-size:0.85rem; color:#ffd700; font-weight:600;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
-    </div>
-
   </div>
 
-  <!-- AUDIOS -->
+  <!-- AUDIOS DE TU REPOSITORIO -->
   <audio id="bgMusic" src="royaltyfreemusicstudio-medieval-fantasy-music-462199.mp3" loop></audio>
   <audio id="sfxMagic" src="magic.mp3"></audio>
   <audio id="sfxOcean" src="dragon-studio-ocean-waves-376898.mp3"></audio>
 
   <script>
-    // TEXTOS DE LA HISTORIA (Efecto Mecanografía)
-    const storyTexts = {
-      0: "¡Psst! ¡Eri! Sí, acércate... soy yo, BimBin. Sé que parezco un duende navideño fuera de temporada, pero tu novio me dio la clave secreta para volver hoy. ¡Hace dos años cuidamos de ti, pero este cumpleaños es especial y requiere algo épico! ¿Estás lista?",
-      1: "Veo que tus hombros han cargado con el esfuerzo de todo este tiempo... Soy Tharun. Para volver a brillar, primero debes soltar la tensión. He preparado un templo de coco, piedras volcánicas y vino para ti.",
-      2: "Tu luz interior ha crecido tanto en dos años que necesita una nueva manifestación exterior... Soy Lyra. Permíteme esculpir en tu cabello la verdadera corona de color y estilo que mereces.",
-      3: "Los guardianes ya cuidaron tu cuerpo y tu luz... ¡ahora el gran final es mío! Te he reservado una mesa sobre las olas del océano en La Rosa Náutica, para brindar junto a ti, quien te ama y la Reina Madre (tu mamá)."
-    };
+    // BASE DE DATOS DE LA CONVERSACIÓN PASO A PASO
+    const storyData = [
+      // SCENE 0: PRÓLOGO CON BIMBIN
+      {
+        chapter: "PRÓLOGO",
+        title: "El Regreso de BimBin",
+        speaker: "BimBin",
+        image: "Bimbin-removebg-preview_20260726_231003_0000.png",
+        dialogues: [
+          {
+            text: "¡Psst! ¡Eri! Sí, acércate... soy yo, BimBin. Sé lo que estás pensando: '¿Qué hace un duende de Navidad apareciendo en pleno cumpleaños?'",
+            btnText: "¡BimBin! ¿Qué haces aquí? 🤔"
+          },
+          {
+            text: "Bueno... la verdad es que tu novio me reclutó hace dos años para una misión secreta que no podía rechazar. Desde entonces, mi fecha favorita del año no es diciembre... es el día en que tú viniste al mundo.",
+            btnText: "Recuerdo a los Cuidadores... ✨"
+          },
+          {
+            text: "¡Exacto! Hace dos años convocamos a los Tres Cuidadores para renovar tu energía. Pero en este tiempo has luchado, has crecido y tu luz brilla con una fuerza diferente. ¡Hoy venimos a entregarte tu nueva celebración!",
+            btnText: "¡Estoy lista! Abrir el Libro 📜"
+          }
+        ]
+      },
 
-    let currentScene = 0;
+      // SCENE 1: THARUN & VITA LIMA SPA
+      {
+        chapter: "ACTO I",
+        title: "El Templo del Sosiego",
+        speaker: "Tharun",
+        image: "Tharun-removebg-preview_20260726_231150_0000.png",
+        dialogues: [
+          {
+            text: "Ha pasado tiempo, Eri... Soy Tharun, el Guardián del Descanso. He visto cómo has trabajado duro en estos meses y cómo el cansancio se ha acumulado silenciosamente en tus hombros.",
+            btnText: "Es verdad, necesito un respiro... 🌿"
+          },
+          {
+            text: "Para comenzar un nuevo año de vida y volver a brillar, primero debes soltar la carga. He preparado para ti un templo envolvente de paz, piedras volcánicas calientes y bálsamo de coco.",
+            btnText: "Descubrir la Primera Bendición ✨"
+          }
+        ],
+        cardContent: `<img src="Masajes.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:16px;" alt="Vita Lima Spa">`
+      },
+
+      // SCENE 2: LYRA & CORTE Y COLOR DE CABELLO
+      {
+        chapter: "ACTO II",
+        title: "El Espejo del Sol",
+        speaker: "Lyra",
+        image: "Lyra-removebg-preview_20260726_231211_0000.png",
+        dialogues: [
+          {
+            text: "¡Mi querida Eri! Soy Lyra. Nunca me fui del todo; he estado observando cómo tu luz interior se ha ido fortaleciendo día a día. Para mí, la forma en que te presentas al mundo es el reflejo directo de la reina en la que te has convertido.",
+            btnText: "¿Qué has preparado, Lyra? ✂️"
+          },
+          {
+            text: "Tu nuevo ciclo exige una nueva manifestación de tu elegancia. He traído mis tijeras de precisión y matices de luz para esculpir en tu cabello una verdadera corona radiante.",
+            btnText: "Revelar el Espejo Mágico 🪞"
+          }
+        ],
+        cardContent: `
+          <h3 style="color:#ffd700; margin-bottom:8px;">✨ Experiencia de Estilo Real</h3>
+          <p style="font-size:0.85rem; line-height:1.6;">Una sesión de renovación completa:<br><strong>Corte Personalizado + Coloración</strong><br>para matizar tu corona de luz.</p>
+        `
+      },
+
+      // SCENE 3: BIMBIM & LA ROSA NÁUTICA
+      {
+        chapter: "ACTO III",
+        title: "El Banquete sobre el Mar",
+        speaker: "BimBin",
+        image: "Bimbin-removebg-preview_20260726_231003_0000.png",
+        dialogues: [
+          {
+            text: "Los guardianes ya cuidaron tu cuerpo y tu luz... ¡ahora el gran final me pertenece a mí! Ningún ritual sagrado está completo sin un gran festín para celebrar tu vida.",
+            btnText: "¿Un festín? ¿Dónde? 🌊"
+          },
+          {
+            text: "He reservado un castillo suspenso sobre las olas del océano en La Rosa Náutica. Pero la verdadera magia es la compañía: celebraremos junto a la Reina Madre (tu mamá) y quien te ama con todo el corazón.",
+            btnText: "Descubrir la Mesa Real 🍷"
+          }
+        ],
+        cardContent: `
+          <h3 style="color:#ffd700; margin-bottom:8px;">🍷 Festín en La Rosa Náutica</h3>
+          <p style="font-size:0.85rem; line-height:1.6;">Almuerzo de celebración sobre el océano Pacífico junto a la <strong>Reina Madre (tu mamá)</strong> y quien te ama.</p>
+        `
+      },
+
+      // SCENE 4: FINAL
+      {
+        chapter: "EPÍLOGO",
+        title: "¡Feliz Cumpleaños, Eri!",
+        speaker: "BimBin y tu Novio",
+        image: "Bimbin-removebg-preview_20260726_231003_0000.png",
+        dialogues: [
+          {
+            text: "Has completado el viaje de la Triple Corona. Cada una de estas tres experiencias fue planificada con infinito cariño para que descanses, te sientas radiante y celebres el don de tu vida.",
+            btnText: "Ver Resumen de Regalos ❤️"
+          }
+        ]
+      }
+    ];
+
+    let currentSceneIdx = 0;
+    let currentDialogueIdx = 0;
     let typingTimer;
 
     const bgMusic = document.getElementById('bgMusic');
     const sfxMagic = document.getElementById('sfxMagic');
     const sfxOcean = document.getElementById('sfxOcean');
 
-    // Muro de partículas sutiles
+    // Partículas de fondo
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const particles = Array.from({length: 40}, () => ({
+    const particles = Array.from({length: 35}, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 1.8 + 0.5,
+      radius: Math.random() * 1.5 + 0.5,
       alpha: Math.random() * 0.5 + 0.2,
-      speed: Math.random() * 0.4 + 0.1
+      speed: Math.random() * 0.3 + 0.1
     }));
 
     function drawParticles() {
@@ -416,14 +382,11 @@
     }
     drawParticles();
 
-    // Efecto Typewriter (Mecanografía)
-    function typeWriter(text, elementId, btnId, callback) {
+    function typeWriter(text, callback) {
       let i = 0;
-      const speed = 28; // milisegundos por letra
-      const element = document.getElementById(elementId);
-      const btn = document.getElementById(btnId);
+      const speed = 25; // Milisegundos por letra
+      const element = document.getElementById('dialogue-text');
       element.innerHTML = "";
-      btn.classList.remove('visible');
 
       function type() {
         if (i < text.length) {
@@ -431,11 +394,115 @@
           i++;
           typingTimer = setTimeout(type, speed);
         } else {
-          btn.classList.add('visible');
           if (callback) callback();
         }
       }
       type();
+    }
+
+    function renderScene() {
+      const scene = storyData[currentSceneIdx];
+      document.getElementById('chapter-tag').innerText = scene.chapter;
+      document.getElementById('scene-title').innerText = scene.title;
+      document.getElementById('speaker-name').innerText = scene.speaker;
+      document.getElementById('character-img').src = scene.image;
+
+      // Ocultar la carta de regalo al iniciar escena
+      const card = document.getElementById('flip-card');
+      card.style.display = 'none';
+      card.classList.remove('flipped');
+
+      renderDialogueBeat();
+    }
+
+    function renderDialogueBeat() {
+      const scene = storyData[currentSceneIdx];
+      const beat = scene.dialogues[currentDialogueIdx];
+      const choicesContainer = document.getElementById('choices-container');
+      choicesContainer.innerHTML = ""; // Limpiar botones
+
+      typeWriter(beat.text, () => {
+        // Al terminar de escribir el texto, mostrar el botón de respuesta
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.innerText = beat.btnText;
+
+        btn.onclick = () => {
+          if (currentSceneIdx === 0 && currentDialogueIdx === 0) {
+            bgMusic.volume = 0.35;
+            bgMusic.play().catch(e => console.log("Audio override"));
+          }
+
+          // Si hay más diálogos en esta escena
+          if (currentDialogueIdx < scene.dialogues.length - 1) {
+            currentDialogueIdx++;
+            renderDialogueBeat();
+          } else {
+            // Llegamos al final del diálogo de la escena
+            if (scene.cardContent) {
+              // Si la escena tiene tarjeta de regalo, la mostramos
+              document.getElementById('card-back-content').innerHTML = scene.cardContent;
+              document.getElementById('flip-card').style.display = 'block';
+              choicesContainer.innerHTML = ""; // Espera a que toque la carta
+            } else if (currentSceneIdx === 4) {
+              // Pantalla final
+              showFinalSummary();
+            } else {
+              // Avanzar siguiente escena
+              advanceNextScene();
+            }
+          }
+        };
+
+        choicesContainer.appendChild(btn);
+      });
+    }
+
+    function revealGiftCard() {
+      sfxMagic.currentTime = 0;
+      sfxMagic.play();
+
+      const card = document.getElementById('flip-card');
+      card.classList.toggle('flipped');
+
+      if (currentSceneIdx === 3) {
+        sfxOcean.volume = 0.5;
+        sfxOcean.play();
+      }
+
+      // Crear botón para avanzar a la siguiente escena
+      const choicesContainer = document.getElementById('choices-container');
+      choicesContainer.innerHTML = "";
+
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.style.marginTop = '15px';
+      btn.innerText = "Aceptar esta Bendición y Continuar ➔";
+      btn.onclick = () => advanceNextScene();
+      choicesContainer.appendChild(btn);
+    }
+
+    function advanceNextScene() {
+      currentSceneIdx++;
+      currentDialogueIdx = 0;
+      if (currentSceneIdx < storyData.length) {
+        renderScene();
+      }
+    }
+
+    function showFinalSummary() {
+      sfxOcean.pause();
+      confetti({ particleCount: 130, spread: 90, origin: { y: 0.6 } });
+
+      const choicesContainer = document.getElementById('choices-container');
+      choicesContainer.innerHTML = `
+        <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); padding: 15px; border-radius: 16px; text-align: left; font-size: 0.82rem; line-height: 1.8; margin-top: 10px;">
+          🌿 <strong>Acto I:</strong> Relax & Masaje Coco Premium (Vita Lima Spa)<br>
+          ✂️ <strong>Acto II:</strong> Corte & Coloración de Cabello<br>
+          🌊 <strong>Acto III:</strong> Almuerzo en La Rosa Náutica
+        </div>
+        <p style="font-size:0.85rem; color:#ffd700; font-weight:600; margin-top:15px;">Con todo nuestro amor,<br>Tu novio y BimBin.</p>
+      `;
     }
 
     function toggleMusic() {
@@ -443,66 +510,8 @@
       else bgMusic.pause();
     }
 
-    function updateProgress(scene) {
-      document.querySelectorAll('.dot').forEach((dot, idx) => {
-        if (idx <= scene) dot.classList.add('active');
-        else dot.classList.remove('active');
-      });
-    }
-
-    function startJourney() {
-      bgMusic.volume = 0.35;
-      bgMusic.play().catch(e => console.log("Audio block override"));
-      nextScene(1);
-    }
-
-    function nextScene(sceneNumber) {
-      currentScene = sceneNumber;
-      updateProgress(sceneNumber);
-
-      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      document.getElementById(`step-${sceneNumber}`).classList.add('active');
-
-      // Iniciar mecanografía de la escena
-      typeWriter(storyTexts[sceneNumber], `text-${sceneNumber}`, `btn-${sceneNumber}`, () => {
-        // Mostrar la carta de regalo oculta después de terminar el texto
-        if (sceneNumber >= 1 && sceneNumber <= 3) {
-          document.getElementById(`card-${sceneNumber}`).style.display = 'block';
-        }
-      });
-    }
-
-    function flipCard(actNumber) {
-      sfxMagic.currentTime = 0;
-      sfxMagic.play();
-      
-      const card = document.getElementById(`card-${actNumber}`);
-      card.classList.toggle('flipped');
-
-      if (actNumber === 3) {
-        sfxOcean.volume = 0.5;
-        sfxOcean.play();
-      }
-    }
-
-    function finishJourney() {
-      currentScene = 4;
-      updateProgress(4);
-
-      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      document.getElementById('step-4').classList.add('active');
-      sfxOcean.pause();
-
-      confetti({
-        particleCount: 130,
-        spread: 90,
-        origin: { y: 0.6 }
-      });
-    }
-
-    // Iniciar escena 0 al cargar
     window.onload = () => {
-      typeWriter(storyTexts[0], "text-0", "btn-0");
+      renderScene();
     };
   </script>
 </body>
